@@ -56,6 +56,8 @@ const Colors = () => {
     const [isModalCreateVisible, setIsModalCreateVisible] = useState(false);
     const [isModalEditVisible, setIsModalEditVisible] = useState(false);
     const [isModalConfirmVisible, setIsModalConfirmVisible] = useState(false);
+    const [isModalResetVisible, setIsModalResetVisible] = useState(false);
+    const [isModalPlansVisible, setIsModalPlansVisible] = useState(false);
     const [dataAccount, setDataAccount] = useState({});
     const [newAccount, setNewAccount] = useState({});
     const [dataStatusAccount, setDataStatusAccount] = useState({});
@@ -149,6 +151,17 @@ const Colors = () => {
         setDataAccount({});
     };
 
+    const handleShowModalReset = (company) => {
+        setDataAccount(company);
+        console.log('Dataaaa del setData:::', dataAccount);
+        setIsModalResetVisible(true);
+    };
+    const handleShowModalPlans = (company) => {
+        setDataAccount(company);
+        console.log('Dataaaa del setData:::', dataAccount);
+        setIsModalPlansVisible(true);
+    };
+
     const handleEditAccount = async () => {
 
         const sendData = {
@@ -193,6 +206,8 @@ const Colors = () => {
 
     const handleCloseModalConfirm = () => {
         setIsModalConfirmVisible(false);
+        setIsModalResetVisible(false);
+        setIsModalPlansVisible(false);
         setDataStatusAccount({});
 
     };
@@ -225,6 +240,23 @@ const Colors = () => {
         setIsModalConfirmVisible(false);
     };
 
+    const handleChangeResets = async () => {
+        const sendData = {
+            nit: dataStatusAccount.nit
+        };
+
+        try {
+            const responseNewAccount = await tsaService.changeStatusReset(sendData);
+            console.log('Nuevo registro creado en la API:', responseNewAccount);
+
+        } catch (error) {
+            console.error('Error al crear cuenta:', error);
+        }
+
+        setDataStatusAccount({});
+        setIsModalResetVisible(false);
+    };
+
     return (
         <>
             <CRow>
@@ -239,28 +271,28 @@ const Colors = () => {
                             <CTable align="middle" className="mb-0 border" hover responsive>
                                 <CTableHead className="text-nowrap">
                                     {<CTableRow>
-                                        <CTableHeaderCell className="bg-body-tertiary">Wskey</CTableHeaderCell>
-                                        <CTableHeaderCell className="bg-body-tertiary">Uuid</CTableHeaderCell>
+                                        {/* <CTableHeaderCell className="bg-body-tertiary">Wskey</CTableHeaderCell>
+                                        <CTableHeaderCell className="bg-body-tertiary">Uuid</CTableHeaderCell> */}
                                         <CTableHeaderCell className="bg-body-tertiary">Estado</CTableHeaderCell>
                                         <CTableHeaderCell className="bg-body-tertiary">Nit</CTableHeaderCell>
                                         <CTableHeaderCell className="bg-body-tertiary">Nombre</CTableHeaderCell>
                                         <CTableHeaderCell className="bg-body-tertiary">Correo</CTableHeaderCell>
                                         <CTableHeaderCell className="bg-body-tertiary">Pais</CTableHeaderCell>
-                                        <CTableHeaderCell className="bg-body-tertiary">Departamento/Estado</CTableHeaderCell>
+                                        {/* <CTableHeaderCell className="bg-body-tertiary">Departamento/Estado</CTableHeaderCell>
                                         <CTableHeaderCell className="bg-body-tertiary">Ciudad</CTableHeaderCell>
-                                        <CTableHeaderCell className="bg-body-tertiary">Direccion</CTableHeaderCell>
+                                        <CTableHeaderCell className="bg-body-tertiary">Direccion</CTableHeaderCell> */}
                                         <CTableHeaderCell className="bg-body-tertiary">Acciones</CTableHeaderCell>
                                     </CTableRow>}
                                 </CTableHead>
                                 <CTableBody>
                                     {tableData.map((item, index) => (
                                         <CTableRow v-for="item in tableItems" key={index}>
-                                            <CTableDataCell>
+                                            {/* <CTableDataCell>
                                                 <div className="fw-semibold text-nowrap">{item.webServicesAccessKey}</div>
                                             </CTableDataCell>
                                             <CTableDataCell>
                                                 <div className="fw-semibold text-nowrap">{item.uuid}</div>
-                                            </CTableDataCell>
+                                            </CTableDataCell> */}
                                             <CTableDataCell>
                                                 <div className="fw-semibold text-nowrap">{item.status + ''}</div>
                                             </CTableDataCell>
@@ -278,7 +310,7 @@ const Colors = () => {
                                                 <div className="fw-semibold text-nowrap">{item.company.country}</div>
 
                                             </CTableDataCell>
-                                            <CTableDataCell>
+                                            {/* <CTableDataCell>
                                                 <div className="fw-semibold text-nowrap">{item.company.state}</div>
 
                                             </CTableDataCell>
@@ -289,14 +321,17 @@ const Colors = () => {
                                             <CTableDataCell>
                                                 <div className="fw-semibold text-nowrap">{item.company.address}</div>
 
-                                            </CTableDataCell>
+                                            </CTableDataCell> */}
                                             <CTableDataCell>
                                                 <CButtonGroup role="group" aria-label="Basic example">
                                                     <CButton color="secondary" onClick={() => handleShowModalEdit(item.company)}>
                                                         Editar
                                                     </CButton>
                                                     <CButton color="warning" onClick={() => handleShowModalConfirm(item.nit, item.status)}>
-                                                        Cambiar estado
+                                                        Estado
+                                                    </CButton>
+                                                    <CButton color="secondary" onClick={() => handleShowModalReset(item.company)}>
+                                                        Reset
                                                     </CButton>
                                                 </CButtonGroup>
                                             </CTableDataCell>
@@ -450,6 +485,26 @@ const Colors = () => {
                     </CButton>
                 </CFooter>
             </CModal>
+            <CModal
+                visible={isModalResetVisible}
+                onClose={handleCloseModalConfirm}
+            >
+                <CModalHeader>
+                    <CModalTitle>Cambio de contraseña</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    ¿Esta seguro de cambiar la contraseña de la cuenta?
+                </CModalBody>
+                <CFooter className="d-flex justify-content-between">
+                    <CButton color='secondary' onClick={handleChangeResets} style={{ flex: 1, marginRight: 10 }}>
+                        Si
+                    </CButton>
+                    <CButton color='danger' onClick={handleCloseModalConfirm} style={{ flex: 1 }}>
+                        No
+                    </CButton>
+                </CFooter>
+            </CModal>
+            
         </>
     )
 }
