@@ -64,6 +64,7 @@ const Typography = () => {
     const nitRef = useRef();
     const typePlanRef = useRef();
     const dateValidRef = useRef();
+    const dateFromRef = useRef();
     const stampsRef = useRef();
 
     useEffect(() => {
@@ -112,11 +113,26 @@ const Typography = () => {
         }
 
         let auxDateValid = ''
+        let auxDateFrom = ''
         let auxNumStamps =''
 
         if (auxLimit == false) {
             if (dateValidRef.current.value != '') {
                 auxDateValid = dateValidRef.current.value + 'T05:00:00.000Z'
+            }
+
+            if (dateFromRef.current.value != '') {
+                auxDateFrom = dateFromRef.current.value + 'T05:00:00.000Z'
+            }else{
+                auxDateFrom = new Date().toISOString()
+            }
+
+            if (stampsRef.current.value != '') {
+                auxNumStamps = stampsRef.current.value + ''
+            }
+
+            if (dateFromRef.current.value != '') {
+                auxDateFrom = dateFromRef.current.value + 'T05:00:00.000Z'
             }
 
             if (stampsRef.current.value != '') {
@@ -125,13 +141,14 @@ const Typography = () => {
         }
 
         var dateNow = new Date().toISOString()
-
+        
         var sendData = {
             "nit": nitRef.current.value,
             "unlimited": auxLimit,
             "date_plan": auxDateValid,
             "user_stamps": auxNumStamps,
-            "creationDate": dateNow
+            "creationDate": dateNow,
+            "from": auxDateFrom
         }
 
         try {
@@ -268,7 +285,13 @@ const Typography = () => {
                         {showDataLimit && (
                             <CCol>
                                 <CFormInput
-                                    label="Date"
+                                    label="Date From"
+                                    name='date_plan'
+                                    placeholder="yyyy-mm-dd"
+                                    ref={dateFromRef}
+                                />
+                                <CFormInput
+                                    label="Date Validation"
                                     name='date_plan'
                                     placeholder="yyyy-mm-dd"
                                     ref={dateValidRef}

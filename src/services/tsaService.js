@@ -129,6 +129,55 @@ const changeStatusPlan = async (data_plan) => {
     }
 };
 
+/*
+********************************
+*      Gestion de Empresas      *
+********************************
+*/
+
+const createEmpresas = async (dataAccount) => {
+    try {
+        const response = await axios.post(API_URL + 'logic/crearEmpresas', dataAccount, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log('Respuestaaaa crear account:::', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
+
+const updateEmpresas = async (dataAccount) => {
+    try {
+        const response = await axios.post(API_URL + 'logic/updateEmpresas', dataAccount, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
+
+const getEmpresas = async () => {
+    try {
+        const response = await axios.post(API_URL + 'logic/listarEmpresas', {}, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
+
 export default {
     createAccount,
     updateAccount,
@@ -139,5 +188,10 @@ export default {
     /* Planes*/
     createPlan,
     getPlans,
-    changeStatusPlan
+    changeStatusPlan,
+
+    /* Empresas */
+    createEmpresas,
+    updateEmpresas,
+    getEmpresas
 };
