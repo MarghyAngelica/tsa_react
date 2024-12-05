@@ -27,6 +27,7 @@ import {
     CFooter,
     CForm,
     CFormInput,
+    CFormSelect,
     CFormTextarea
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
@@ -65,6 +66,8 @@ const Colors = () => {
     const [newAccount, setNewAccount] = useState({});
     const [dataStatusAccount, setDataStatusAccount] = useState({});
 
+    const [empresas, setEmpresas] = useState([]);
+
     const nameRef = useRef();
     const nitRef = useRef();
     const emailRef = useRef();
@@ -72,6 +75,7 @@ const Colors = () => {
     const cityRef = useRef();
     const stateRef = useRef();
     const addressRef = useRef();
+    const empresaRef = useRef();
 
     const nameEditRef = useRef();
     const keyRef = useRef();
@@ -86,9 +90,12 @@ const Colors = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const dataEmpresas = await tsaService.getEmpresas();
+                setEmpresas(dataEmpresas.empresas);
+
                 const data = await tsaService.getAccounts();
                 console.log('Resultado de la busqueda:::', data.cuentas);
-                console.log('Resultado de la busqueda______dataAccount:::', dataAccount);                
+                console.log('Resultado de la busqueda______dataAccount:::', dataAccount);
                 setTableData(data.cuentas);
             } catch (error) {
                 console.error('Error fetching accounts:', error);
@@ -129,10 +136,13 @@ const Colors = () => {
                 nit: nitRef.current.value,
                 state: stateRef.current.value
             },
-            status: true
+            status: true,
+            empresa: empresaRef.current.value
         };
 
-        try {
+        console.log('Data para nueva cuentaaaaaa::::', sendData);
+
+        /*try {
             const responseNewAccount = await tsaService.createAccount(sendData);
             console.log('Nuevo registro creado en la API:', responseNewAccount);
 
@@ -140,7 +150,7 @@ const Colors = () => {
 
         } catch (error) {
             console.error('Error al crear cuenta:', error);
-        }
+        }*/
 
         setNewAccount({});
         handleCloseModalCreate();
@@ -385,6 +395,14 @@ const Colors = () => {
                 </CModalHeader>
                 <CModalBody>
                     <CForm>
+                        <CFormSelect ref={empresaRef} label="Empresa">
+                          {empresas.map((empresa) => (
+                            <option key={empresa.name} value={empresa.uuid}>
+                              {empresa.name}
+                            </option>
+                          ))}
+                        </CFormSelect>
+
                         <CFormInput
                             label="Nombre"
                             name='name'
@@ -546,7 +564,7 @@ const Colors = () => {
                 <CModalBody>
                     <CForm>
                         {/* <CFormInput */}
-                        <CFormTextarea rows={3} 
+                        <CFormTextarea rows={3}
                             label="KeyPast"
                             defaultValue={dataKey}
                             disabled={true}

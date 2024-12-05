@@ -80,7 +80,7 @@ const Colors = () => {
             try {
                 const data = await tsaService.getEmpresas();
                 console.log('Resultado de la busqueda:::', data);
-                setTableData(data.cuentas);
+                setTableData(data.empresas);
             } catch (error) {
                 console.error('Error fetching accounts:', error);
             }

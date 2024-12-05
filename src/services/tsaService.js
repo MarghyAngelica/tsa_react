@@ -146,7 +146,7 @@ const changeStatusPlan = async (data_plan) => {
 
 /*
 ********************************
-*      Gestion de Empresas      *
+*      Gestion de Empresas     *
 ********************************
 */
 
