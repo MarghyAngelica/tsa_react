@@ -114,7 +114,7 @@ const Typography = () => {
 
         let auxDateValid = ''
         let auxDateFrom = ''
-        let auxNumStamps =''
+        let auxNumStamps = ''
 
         if (auxLimit == false) {
             if (dateValidRef.current.value != '') {
@@ -123,7 +123,7 @@ const Typography = () => {
 
             if (dateFromRef.current.value != '') {
                 auxDateFrom = dateFromRef.current.value + 'T05:00:00.000Z'
-            }else{
+            } else {
                 auxDateFrom = new Date().toISOString()
             }
 
@@ -141,7 +141,7 @@ const Typography = () => {
         }
 
         var dateNow = new Date().toISOString()
-        
+
         var sendData = {
             "nit": nitRef.current.value,
             "unlimited": auxLimit,
@@ -213,12 +213,13 @@ const Typography = () => {
                                 <CTableHead className="text-nowrap">
                                     {<CTableRow>
                                         <CTableHeaderCell className="bg-body-tertiary">Accountuuid</CTableHeaderCell>
-                                        <CTableHeaderCell className="bg-body-tertiary">Active</CTableHeaderCell>
+                                        <CTableHeaderCell className="bg-body-tertiary">Estatus</CTableHeaderCell>
                                         <CTableHeaderCell className="bg-body-tertiary">Costbystamp</CTableHeaderCell>
-                                        <CTableHeaderCell className="bg-body-tertiary">Creation date</CTableHeaderCell>
-                                        <CTableHeaderCell className="bg-body-tertiary">Units</CTableHeaderCell>
-                                        <CTableHeaderCell className="bg-body-tertiary">Valid date</CTableHeaderCell>
-                                        <CTableHeaderCell className="bg-body-tertiary">Unilimited</CTableHeaderCell>
+                                        <CTableHeaderCell className="bg-body-tertiary">Fecha de Creacion</CTableHeaderCell>
+                                        <CTableHeaderCell className="bg-body-tertiary">Fecha de Inicio</CTableHeaderCell>
+                                        <CTableHeaderCell className="bg-body-tertiary">Unidades</CTableHeaderCell>
+                                        <CTableHeaderCell className="bg-body-tertiary">Fecha de Validacion</CTableHeaderCell>
+                                        <CTableHeaderCell className="bg-body-tertiary">Ilimitado</CTableHeaderCell>
                                         <CTableHeaderCell className="bg-body-tertiary">Accion</CTableHeaderCell>
 
                                     </CTableRow>}
@@ -237,6 +238,9 @@ const Typography = () => {
                                             </CTableDataCell>
                                             <CTableDataCell>
                                                 <div className="fw-semibold text-nowrap">{item.creationDate}</div>
+                                            </CTableDataCell>
+                                            <CTableDataCell>
+                                                <div className="fw-semibold text-nowrap">{item.from}</div>
                                             </CTableDataCell>
                                             <CTableDataCell>
                                                 <div className="fw-semibold text-nowrap">{item.units}</div>
@@ -278,18 +282,19 @@ const Typography = () => {
                             ref={nitRef}
                             placeholder="Ingrese el nit del usuario"
                         />
+                        <CFormInput
+                            label="Date From"
+                            name='date_plan'
+                            placeholder="yyyy-mm-dd"
+                            ref={dateFromRef}
+                        />
                         <CFormSelect ref={typePlanRef} label="Tipo de plan" onChange={handleSelectTypePlan}>
                             <option value="unlimited">Unlimited</option>
                             <option value="limited">Limited</option>
                         </CFormSelect>
                         {showDataLimit && (
                             <CCol>
-                                <CFormInput
-                                    label="Date From"
-                                    name='date_plan'
-                                    placeholder="yyyy-mm-dd"
-                                    ref={dateFromRef}
-                                />
+
                                 <CFormInput
                                     label="Date Validation"
                                     name='date_plan'
