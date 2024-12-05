@@ -136,7 +136,7 @@ const Typography = () => {
             }
 
             if (stampsRef.current.value != '') {
-                auxNumStamps = stampsRef.current.value + ''
+                auxNumStamps = stampsRef.current.value
             }
         }
 
@@ -148,7 +148,7 @@ const Typography = () => {
             "date_plan": auxDateValid,
             "user_stamps": auxNumStamps,
             "creationDate": dateNow,
-            "from": auxDateFrom
+            //"from": auxDateFrom
         }
 
         try {

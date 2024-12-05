@@ -142,7 +142,7 @@ const Colors = () => {
 
         console.log('Data para nueva cuentaaaaaa::::', sendData);
 
-        /*try {
+        try {
             const responseNewAccount = await tsaService.createAccount(sendData);
             console.log('Nuevo registro creado en la API:', responseNewAccount);
 
@@ -150,7 +150,7 @@ const Colors = () => {
 
         } catch (error) {
             console.error('Error al crear cuenta:', error);
-        }*/
+        }
 
         setNewAccount({});
         handleCloseModalCreate();
