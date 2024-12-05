@@ -23,6 +23,21 @@ const createAccount = async (dataAccount) => {
     }
 };
 
+const passKey = async (dataAccount) => {
+    try {
+        const response = await axios.post(API_URL + 'logic/passKey', dataAccount, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log('Respuestaaaa crear account:::', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
+
 const updateAccount = async (dataAccount) => {
     try {
         const response = await axios.post(API_URL + 'logic/updateCuentas', dataAccount, {
@@ -184,6 +199,7 @@ export default {
     changeStatusAccount,
     getAccounts,
     changeStatusReset,
+    passKey,
 
     /* Planes*/
     createPlan,

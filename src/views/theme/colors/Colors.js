@@ -27,6 +27,7 @@ import {
     CFooter,
     CForm,
     CFormInput,
+    CFormTextarea
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -58,7 +59,9 @@ const Colors = () => {
     const [isModalConfirmVisible, setIsModalConfirmVisible] = useState(false);
     const [isModalResetVisible, setIsModalResetVisible] = useState(false);
     const [isModalPlansVisible, setIsModalPlansVisible] = useState(false);
+    const [isModalKeyVisible, setIsModalKeyVisible] = useState(false);
     const [dataAccount, setDataAccount] = useState({});
+    const [dataKey, setDataKey] = useState({});
     const [newAccount, setNewAccount] = useState({});
     const [dataStatusAccount, setDataStatusAccount] = useState({});
 
@@ -71,18 +74,21 @@ const Colors = () => {
     const addressRef = useRef();
 
     const nameEditRef = useRef();
+    const keyRef = useRef();
     const nitEditRef = useRef();
     const emailEditRef = useRef();
     const countryEditRef = useRef();
     const cityEditRef = useRef();
     const stateEditRef = useRef();
     const addressEditRef = useRef();
+    var data_cuentas
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await tsaService.getAccounts();
-                console.log('Resultado de la busqueda:::', data);
+                console.log('Resultado de la busqueda:::', data.cuentas);
+                console.log('Resultado de la busqueda______dataAccount:::', dataAccount);                
                 setTableData(data.cuentas);
             } catch (error) {
                 console.error('Error fetching accounts:', error);
@@ -156,10 +162,32 @@ const Colors = () => {
         console.log('Dataaaa del setData:::', dataAccount);
         setIsModalResetVisible(true);
     };
-    const handleShowModalPlans = (company) => {
-        setDataAccount(company);
-        console.log('Dataaaa del setData:::', dataAccount);
-        setIsModalPlansVisible(true);
+
+
+    const handleShowModalKey = async (webServicesAccessKey,uuid,parentAccountUuid) => {
+        // setDataAccount(company);
+        console.log('Key_webServicesAccessKey:::', webServicesAccessKey);
+        console.log('Key_uuid:::', uuid);
+        console.log('Key_parentAccountUuid:::', parentAccountUuid);
+
+        const sendData = {
+            webServicesAccessKey:webServicesAccessKey,
+            uuid:uuid,
+            parentAccountUuid:parentAccountUuid
+        };
+
+        try {
+            const responseNewAccount = await tsaService.passKey(sendData);
+            console.log('Nuevo registro creado en la API:', responseNewAccount);
+            data_cuentas = responseNewAccount.webServicesAccessKey
+            setDataKey(data_cuentas)
+
+            console.log('data_cuentas:', data_cuentas);
+
+        }catch(e){
+
+        }
+        setIsModalKeyVisible(true);
     };
 
     const handleEditAccount = async () => {
@@ -208,6 +236,7 @@ const Colors = () => {
         setIsModalConfirmVisible(false);
         setIsModalResetVisible(false);
         setIsModalPlansVisible(false);
+        setIsModalKeyVisible(false);
         setDataStatusAccount({});
 
     };
@@ -332,6 +361,9 @@ const Colors = () => {
                                                     </CButton>
                                                     <CButton color="secondary" onClick={() => handleShowModalReset(item.company)}>
                                                         Reset
+                                                    </CButton>
+                                                    <CButton color="secondary" onClick={() => handleShowModalKey(item.webServicesAccessKey,item.uuid,item.parentAccountUuid )}>
+                                                        Key
                                                     </CButton>
                                                 </CButtonGroup>
                                             </CTableDataCell>
@@ -504,7 +536,31 @@ const Colors = () => {
                     </CButton>
                 </CFooter>
             </CModal>
-            
+            <CModal
+                visible={isModalKeyVisible}
+                onClose={handleCloseModalConfirm}
+            >
+                <CModalHeader>
+                    <CModalTitle>PastKey</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <CForm>
+                        {/* <CFormInput */}
+                        <CFormTextarea rows={3} 
+                            label="KeyPast"
+                            defaultValue={dataKey}
+                            disabled={true}
+
+                        />
+                    </CForm>
+                </CModalBody>
+                <CFooter className="d-flex justify-content-between">
+                    <CButton color='danger' onClick={handleCloseModalConfirm} style={{ flex: 1 }}>
+                        Cerrar
+                    </CButton>
+                </CFooter>
+            </CModal>
+
         </>
     )
 }
