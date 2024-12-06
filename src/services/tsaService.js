@@ -95,6 +95,20 @@ const getAccounts = async () => {
     }
 };
 
+const getAccountsByEmpresa = async (dataFilter) => {
+  try {
+      const response = await axios.post(API_URL + 'logic/listarCuentasEmpresa', dataFilter, {
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+  }
+};
+
 /*
 ********************************
 *      Gestion de planes       *
@@ -150,6 +164,21 @@ const changeStatusPlan = async (data_plan) => {
 ********************************
 */
 
+const loginEmpresa = async (dataLogin) => {
+  try {
+      const response = await axios.post(API_URL + 'logic/loginEmpresa', dataLogin, {
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+      console.log('Respuestaaaa crear account:::', response.data);
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+  }
+};
+
 const createEmpresas = async (dataAccount) => {
     try {
         const response = await axios.post(API_URL + 'logic/crearEmpresas', dataAccount, {
@@ -200,6 +229,7 @@ export default {
     getAccounts,
     changeStatusReset,
     passKey,
+    getAccountsByEmpresa,
 
     /* Planes*/
     createPlan,
@@ -207,6 +237,7 @@ export default {
     changeStatusPlan,
 
     /* Empresas */
+    loginEmpresa,
     createEmpresas,
     updateEmpresas,
     getEmpresas

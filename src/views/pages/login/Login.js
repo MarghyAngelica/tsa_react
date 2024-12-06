@@ -16,6 +16,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useAuth } from '../../../context/authContext'
+import tsaService from '../../../services/tsaService';
 
 const Login = () => {
   const { login, isAuthenticated } = useAuth()
@@ -23,8 +24,8 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
-  const handleLogin = () => {
-    if (username === 'admin' && password === 'admin') {
+  const handleLogin = async () => {
+    /*if (username === 'admin' && password === 'admin') {
       login('admin')
       console.log('Entro a user adminnn:::::::');
     } else if (username === 'user' && password === 'user') {
@@ -32,6 +33,23 @@ const Login = () => {
       console.log('Entro a user:::::::');
     } else {
       alert('Credenciales incorrectas')
+    }*/
+
+    if (username === 'admin' && password === 'admin') {
+      login('admin', 'admin')
+      console.log('Entro a user adminnn:::::::');
+    } else {
+      try {
+        var sendData = {
+          user: username,
+          pass: password
+        }
+        const dataResLogin = await tsaService.loginEmpresa(sendData);
+        login('user', dataResLogin.empresa.uuid)
+      } catch (error) {
+        alert('Credenciales incorrectas')
+      }
+      //alert('Credenciales incorrectas')
     }
   }
 

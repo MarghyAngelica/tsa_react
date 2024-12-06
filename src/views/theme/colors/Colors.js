@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import tsaService from '../../../services/tsaService';
+import { useAuth } from '../../../context/authContext'
 
 import {
     CAvatar,
@@ -54,6 +55,8 @@ import {
     cilUserFemale,
 } from '@coreui/icons'
 const Colors = () => {
+    const { userRole, uuidUser } = useAuth();
+
     const [tableData, setTableData] = useState([]);
     const [isModalCreateVisible, setIsModalCreateVisible] = useState(false);
     const [isModalEditVisible, setIsModalEditVisible] = useState(false);
@@ -93,7 +96,17 @@ const Colors = () => {
                 const dataEmpresas = await tsaService.getEmpresas();
                 setEmpresas(dataEmpresas.empresas);
 
-                const data = await tsaService.getAccounts();
+                var data
+                if (userRole == 'admin') {
+                  data = await tsaService.getAccounts();
+                }else{
+                  let sendData = {
+                    empresa: uuidUser
+                  }
+                  data = await tsaService.getAccountsByEmpresa(sendData);
+                }
+
+                //const data = await tsaService.getAccounts();
                 console.log('Resultado de la busqueda:::', data.cuentas);
                 console.log('Resultado de la busqueda______dataAccount:::', dataAccount);
                 setTableData(data.cuentas);

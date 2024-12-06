@@ -142,7 +142,7 @@ const AppHeader = () => {
         </CHeaderNav> */}
         <CHeaderNav>
           <CButton onClick={handleLogout}>
-            Cerrar Sesion<CIcon icon={cilAccountLogout} size="lg" />
+            Cerrar Sesion  <CIcon icon={cilAccountLogout} size="lg" />
           </CButton>
         </CHeaderNav>
       </CContainer>

@@ -120,13 +120,13 @@ const Colors = () => {
         };
 
         try {
-            const responseNewAccount = await tsaService.createEmpresas(sendData);
-            console.log('Nuevo registro creado en la API:', responseNewAccount);
+            const responseNewEmpresa = await tsaService.createEmpresas(sendData);
+            console.log('Nuevo registro creado en la API:', responseNewEmpresa);
 
-            setTableData(prevData => [...prevData, responseNewAccount.dataCuenta]);
+            setTableData(prevData => [...prevData, responseNewEmpresa.dataEmpresa]);
 
         } catch (error) {
-            console.error('Error al crear cuenta:', error);
+            console.error('Error al crear empresa:', error);
         }
 
         setNewAccount({});
