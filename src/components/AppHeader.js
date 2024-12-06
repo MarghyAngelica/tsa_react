@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
@@ -13,6 +13,7 @@ import {
   CNavLink,
   CNavItem,
   useColorModes,
+  CButton,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -23,14 +24,18 @@ import {
   cilMenu,
   cilMoon,
   cilSun,
+  cilAccountLogout
 } from '@coreui/icons'
 
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
+import { useAuth } from '../context/authContext'
 
 const AppHeader = () => {
+  const { logout } = useAuth()
   const headerRef = useRef()
   const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
@@ -41,6 +46,11 @@ const AppHeader = () => {
         headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0)
     })
   }, [])
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  }
 
   return (
     <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
@@ -130,6 +140,11 @@ const AppHeader = () => {
           </li>
           <AppHeaderDropdown />
         </CHeaderNav> */}
+        <CHeaderNav>
+          <CButton onClick={handleLogout}>
+            Cerrar Sesion<CIcon icon={cilAccountLogout} size="lg" />
+          </CButton>
+        </CHeaderNav>
       </CContainer>
       <CContainer className="px-4" fluid>
         <AppBreadcrumb />

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
@@ -19,11 +19,28 @@ import logo from '../assets/images/gse_tsa.png';
 
 // sidebar nav config
 import navigation from '../_nav'
+import { useAuth } from '../context/authContext'
 
 const AppSidebar = () => {
+  const { userRole } = useAuth();
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
+  const [dataSidebar, setDataSidebar] = useState([]);
+
+  const rutasAdmin = ['Empresas'];
+  useEffect(() => {
+
+    let auxDataSidebar = navigation
+    if (userRole !== 'admin') {
+      auxDataSidebar = navigation.filter(obj => !rutasAdmin.includes(obj.name))
+    }
+
+    console.log('Data del sidbarrrr:::::',auxDataSidebar, userRole);
+
+    setDataSidebar(auxDataSidebar);
+
+  }, []);
 
   return (
     <CSidebar
@@ -55,7 +72,7 @@ const AppSidebar = () => {
           onClick={() => dispatch({ type: 'set', sidebarShow: false })}
         />
       </CSidebarHeader>
-      <AppSidebarNav items={navigation} />
+      <AppSidebarNav items={dataSidebar} />
       <CSidebarFooter className="border-top d-none d-lg-flex">
         <CSidebarToggler
           onClick={() => dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })}
