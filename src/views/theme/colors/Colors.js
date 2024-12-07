@@ -64,6 +64,9 @@ const Colors = () => {
     const [isModalResetVisible, setIsModalResetVisible] = useState(false);
     const [isModalPlansVisible, setIsModalPlansVisible] = useState(false);
     const [isModalKeyVisible, setIsModalKeyVisible] = useState(false);
+
+    const [isInputEmpresaVisible, setIsInputEmpresaVisible] = useState(false);
+    const [isSelectEmpresaVisible, setIsSelectEmpresaVisible] = useState(false);
     const [dataAccount, setDataAccount] = useState({});
     const [dataKey, setDataKey] = useState({});
     const [newAccount, setNewAccount] = useState({});
@@ -79,6 +82,7 @@ const Colors = () => {
     const stateRef = useRef();
     const addressRef = useRef();
     const empresaRef = useRef();
+    const uuidEmpresaRef = useRef();
 
     const nameEditRef = useRef();
     const keyRef = useRef();
@@ -93,13 +97,14 @@ const Colors = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const dataEmpresas = await tsaService.getEmpresas();
-                setEmpresas(dataEmpresas.empresas);
-
                 var data
                 if (userRole == 'admin') {
+                  const dataEmpresas = await tsaService.getEmpresas();
+                  setEmpresas(dataEmpresas.empresas);
+                  setIsSelectEmpresaVisible(true);
                   data = await tsaService.getAccounts();
                 }else{
+                  setIsInputEmpresaVisible(true);
                   let sendData = {
                     empresa: uuidUser
                   }
@@ -138,6 +143,12 @@ const Colors = () => {
 
     const handleSaveNewAccount = async () => {
 
+        let auxIdEmpresa = ''
+        if (userRole == 'admin') {
+          auxIdEmpresa = empresaRef.current.value
+        } else {
+          auxIdEmpresa = uuidEmpresaRef.current.value
+        }
         const sendData = {
             parentAccountUuid: 1,
             company: {
@@ -150,7 +161,7 @@ const Colors = () => {
                 state: stateRef.current.value
             },
             status: true,
-            empresa: empresaRef.current.value
+            empresa: auxIdEmpresa
         };
 
         console.log('Data para nueva cuentaaaaaa::::', sendData);
@@ -408,13 +419,25 @@ const Colors = () => {
                 </CModalHeader>
                 <CModalBody>
                     <CForm>
-                        <CFormSelect ref={empresaRef} label="Empresa">
-                          {empresas.map((empresa) => (
-                            <option key={empresa.name} value={empresa.uuid}>
-                              {empresa.name}
-                            </option>
-                          ))}
-                        </CFormSelect>
+                        {isSelectEmpresaVisible && (
+                          <CFormSelect ref={empresaRef} label="Empresa">
+                            {empresas.map((empresa) => (
+                              <option key={empresa.name} value={empresa.uuid}>
+                                {empresa.name}
+                              </option>
+                            ))}
+                          </CFormSelect>
+                        )}
+
+                        {isInputEmpresaVisible && (
+                          <CFormInput
+                            label="ID Empresa"
+                            name='id_empresa'
+                            ref={uuidEmpresaRef}
+                            defaultValue={uuidUser}
+                            disabled={true}
+                          />
+                        )}
 
                         <CFormInput
                             label="Nombre"
