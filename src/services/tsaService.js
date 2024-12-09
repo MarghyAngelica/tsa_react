@@ -144,6 +144,20 @@ const getPlans = async () => {
     }
 };
 
+const getPlansByEmpresa = async (sendData) => {
+  try {
+      const response = await axios.post(API_URL + 'logic/listarPlanEmpresasInd', sendData, {
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+  }
+};
+
 const changeStatusPlan = async (data_plan) => {
     try {
         const response = await axios.post(API_URL + 'logic/updatePlan', data_plan, {
@@ -234,6 +248,7 @@ export default {
     /* Planes*/
     createPlan,
     getPlans,
+    getPlansByEmpresa,
     changeStatusPlan,
 
     /* Empresas */
